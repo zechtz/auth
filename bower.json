@@ -1,0 +1,28 @@
+{
+  "name": "auth",
+  "description": "authentication with node + postgres + sequelize",
+  "main": "app.js",
+  "authors": [
+    "Zachariah Ngonyani <zachariahn@gmail.com>"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "node",
+    "postgres",
+    "es6"
+  ],
+  "homepage": "https://github.com/zechtz/auth",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation": "~5.5.3",
+    "font-awesome": "fontawesome#~4.6.3",
+    "angular": "~1.5.8"
+  }
+}
