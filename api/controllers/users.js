@@ -9,10 +9,12 @@ module.exports.index = function(req, res){
   });
 };
 
+// New function renders the new users form template 
 module.exports.new =  function(req, res){
   res.render('users/new');
 };
 
+// CREATE function creates a new user and save to the database 
 module.exports.create =  function(req, res){
 
   var password        =  req.body.password;
