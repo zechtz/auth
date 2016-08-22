@@ -54,5 +54,14 @@ app.use(function(err, req, res, next) {
   });
 });
 
+// check what format we're sending 
+app.use(function (req, res, next) {
+  var format = req.param('format');
+
+  if (format) {
+    req.headers.accept = 'application/' + format;
+  }
+  next();
+});
 
 module.exports = app;
