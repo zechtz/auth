@@ -1,7 +1,7 @@
 // app/setupPassport.js
 var passport      =  require('passport');
 var LocalStrategy =  require('passport-local').Strategy;
-var models        =  require('../api/models/index');
+var Model         =  require('../api/models/index');
 var bcrypt        =  require('bcrypt-nodejs');
 
 // Serialize sessions
@@ -10,7 +10,9 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  models.User.find({where: {id: id}}).success(function(user){
+  Model.User.find({
+      where: {id: id}
+  }).then(function(user){
     done(null, user);
   }).error(function(err){
   done(err, null);
@@ -18,45 +20,27 @@ passport.deserializeUser(function(id, done) {
 });
 
 /* middleware  */
-passport.use(new LocalStrategy(function(req, email, passport, done){
-  models.User.find({
-      where:{
-        email: email 
+passport.use(new LocalStrategy({
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true
+}, function(req, email, password, done) {
+    Model.User.findOne({
+      where: {
+        'email': email 
       }
-  }) 
-  .then(function(err, user){
-    /* 
-     there's an error trying to look for user 
-     maybe database connection or something else 
-     */
-     if (err) return done(err);
-
-     /* 
-      we are able to access the database but the 
-      user we're looking for is not in our database 
-      */
-      if (!user) {
-        return done(null, false, req.flash('loginMessage', 'User does not exist'));
+    }).then(function (user) {
+      if (user == null) {
+        return done(null, false, req.flash('message', 'No user found'));
       }
-
-      /* 
-       we found the user who wants to acces our system 
-       but for some reason, password provided is wrong 
-       */
-
-       var hashedPassword = bcrypt.hashSync(password, user.salt)
-
-       /* 
-        all is well, we found the user and all the information 
-        provided is correct 
-        */
-        if (user.password === hashedPassword) {
-          return done(null, user);
-        }
-
-        /*
-         Passwords do not match 
-         */
-         return done(null, false, { message: 'Incorrect credentials.' })
-  });
-}));
+        
+      var hashedPassword = bcrypt.hashSync(password, user.salt);
+        
+      if (user.password === hashedPassword) {
+        return done(null, user);
+      }
+        
+      return done(null, false, req.flash('message', 'Incorrect credentials'));
+    });
+  }
+));
