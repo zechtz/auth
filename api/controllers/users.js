@@ -58,9 +58,15 @@ module.exports.create =  function(req, res){
           salt       : hashedPassword,
           first_name : firstname,
           last_name  : lastname
-      }).then(function(user){
-      res.json(user);
-      });
+      })
+      .then(function(user){
+        if (req.method === "PUT"){
+          res.json(user);
+        } else {
+          res.redirect('/');
+        }
+      }
+    );
 };
 
 // edit user profile 
@@ -89,7 +95,11 @@ module.exports.update = function(req, res){
           last_name  :  req.body.last_name
       })
       .then(function(user){
-        res.json(user);
+        if (req.method === "PUT"){
+          res.json(user);
+        } else {
+          res.redirect('/');
+        }
       })
     }
   });
