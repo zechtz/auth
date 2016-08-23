@@ -20,7 +20,6 @@ app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 require('./config/passport');
 
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -41,7 +40,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
 
 /*
    this middleware is used to make the user object accessible
