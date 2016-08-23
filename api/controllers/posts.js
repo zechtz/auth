@@ -26,29 +26,40 @@ module.exports.show  = function(req, res){
 
 // New function renders the new post form 
 module.exports.new =  function(req, res){
+  var user_id      =  req.user.id;
   res.render('posts/new');
 };
 
 // Create function creates & saves the post 
 module.exports.create =  function(req, res){
 
+  var user_id         =  req.user.id;
+
   var title           =  req.body.title;
-  var UserId          =  req.body.UserId;
   var content         =  req.body.content;
 
   models.Post.create({
       title   : title,
-      UserId  : UserId,
+      UserId  : user_id,
       content : content
-  }).then(function(post){
-  res.json(post);
+  })
+  .then(function(post){
+    if (req.method === "POST"){
+      res.redirect('/');
+    } else {
+      res.json(post);
+    }
   });
 };
 
 // Edit post renders the edit post form 
 module.exports.edit = function(req, res){
-  models.Post.find({ id : req.params.id }, function (err, post){
-    if(err) return err;
+  models.Post.find({
+      where: {
+        id: req.params.id 
+      }
+  })
+  .then(function(post){
     res.render('posts/edit', {
         post  : post,
         title : "Edit"
@@ -71,7 +82,11 @@ module.exports.update = function(req, res){
             content : req.body.content
         })
         .then(function(post){
-          res.json(post);
+          if (req.method === "PUT"){
+            res.json(post);
+          } else {
+            res.redirect('/');
+          }
         })
       }
     });
