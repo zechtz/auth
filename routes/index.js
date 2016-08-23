@@ -1,9 +1,10 @@
-var express         =  require('express');
-var passport        =  require('passport');
-var router          =  express.Router();
-var usersController =  require('../api/controllers/users');
-var homeController  =  require('../api/controllers/home');
-var postsController =  require('../api/controllers/posts');
+var express           =  require('express');
+var passport          =  require('passport');
+var router            =  express.Router();
+var usersController   =  require('../api/controllers/users');
+var homeController    =  require('../api/controllers/home');
+var postsController   =  require('../api/controllers/posts');
+var sessionController =  require('../api/controllers/session');
 
 /* GET home page. */
 router.get('/', homeController.index);
@@ -17,7 +18,12 @@ router.post('/users/update/:id', usersController.update);
 
 // users api routes 
 router.put('/api/v1/users/update/:id', usersController.update);
-router.post('/api/v1/users/signup',    usersController.create);
+router.post('/api/v1/signup',          usersController.create);
+
+// sessions routes 
+router.get('/login',           sessionController.new);
+router.post('/session/create', sessionController.create);
+router.get('/logout',         sessionController.destroy);
 
 // posts routes 
 router.get('/posts/new',         postsController.new);
