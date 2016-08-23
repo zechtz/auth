@@ -11,6 +11,7 @@
     <ul class="right">
       <% if(user) { %>
         <li><a href="/profile">Welcome <%= user.username %></a></li>
+        <li><a href="/posts/new">Add Post</a></li>
         <li><a href="/logout">Logout</a></li>
       <% } else{ %>
         <li><a href="/signup">Register</a></li>
