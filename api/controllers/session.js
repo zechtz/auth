@@ -6,26 +6,29 @@ module.exports.new = function(req, res) {
     req.flash('info', "You are already logged in");
     return res.redirect('/');
   } 
-  res.render('sessions/new', { 
+  res.render('session/new', { 
       title : 'Login'
   });
 };
 
-module.exports.crete = function(req, res, next){
-  passport.authenticate('local-login', function(err, user, info){
+/* log the user in  */
+module.exports.create = function(req, res, next){
+  passport.authenticate('local', function(err, user){
     if (err) return next(err);
     if (!user) return res.redirect('/login');
+
     req.login(user, function(err){
       if (err) return next(err);
-      req.flash('success', "Successfully logged in!");
-      return res.redirect('/');
+      req.flash('success', "Successfully logged in");
+      return res.redirect("/");
     });
-  })(req, res, next)
+  })(req, res, next);
 };
 
 module.exports.destroy = function(req, res){
   req.logout();
   res.redirect('/');
+  console.log('logged out');
   req.session.destroy();
 };
 
